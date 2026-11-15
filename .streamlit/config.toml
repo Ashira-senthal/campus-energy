@@ -1,0 +1,15 @@
+# Streamlit's own theme: this is what colours the widgets, sidebar and
+# dataframes. The custom look (glass cards, gradient pills, glow) is layered on
+# top in app/theme.py, but anything Streamlit draws itself is controlled here.
+[theme]
+base = "dark"
+primaryColor = "#b98cf5"            # purple accent: sliders, focus rings, links
+backgroundColor = "#0a0610"         # near-black plum
+secondaryBackgroundColor = "#171021" # cards, sidebar, inputs
+textColor = "#EDE9F2"
+
+[client]
+toolbarMode = "minimal"             # hide the developer toolbar for a clean kiosk look
+
+[browser]
+gatherUsageStats = false            # no telemetry to Streamlit

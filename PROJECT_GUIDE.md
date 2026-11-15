@@ -259,6 +259,8 @@ campus-energy/
 ├── src/                 config, data_loader, features, models, anomaly, evaluate,
 │                        explain, eda, download_data
 ├── app/app.py           Streamlit dashboard
+├── app/theme.py         visual layer: CSS, glass cards, Plotly styling
+├── .streamlit/config.toml  Streamlit palette (dark + purple accent)
 ├── models/              <building>_models.joblib, <building>_isolation.joblib
 ├── reports/             CSV/JSON tables + figures/ PNGs
 ├── requirements.txt
@@ -751,6 +753,8 @@ unusual load 16. Severity: high 237, medium 123, low 112.
 ```bash
 python -m streamlit run app/app.py     # http://localhost:8501
 ```
+
+**Look and feel.** Styling is deliberately separated from logic: `app/theme.py` holds the stylesheet, card builders and Plotly styler, while `.streamlit/config.toml` sets Streamlit's own palette so widgets, the sidebar and the dataframe are dark without hacks. The CSS targets three stable hooks — Streamlit's `st-key-*` classes on keyed containers, BaseWeb's tab markup, and HTML we render ourselves — rather than internal class names that change between releases. If the theme is ever broken, the data pipeline and every number are unaffected; only appearance degrades.
 
 Six tabs, all reading precomputed parquet — no training happens in the app:
 

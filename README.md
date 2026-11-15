@@ -82,6 +82,9 @@ src/
   download_data.py   reproducible BDG2 download with size checks
 run_pipeline.py      end-to-end pipeline
 app/app.py           Streamlit dashboard (6 tabs)
+app/theme.py         dashboard look: CSS, glass cards, Plotly styling
+.streamlit/
+  config.toml        Streamlit palette (dark + purple accent)
 reports/             generated tables and figures
 PROJECT_GUIDE.md     full viva preparation document
 ```
