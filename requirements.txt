@@ -1,0 +1,39 @@
+# Campus Energy Intelligence - pinned runtime requirements
+# Install with:
+#   python3.11 -m venv .venv
+#   .venv/bin/python -m pip install -r requirements.txt      (Windows: .venv\Scripts\python ...)
+#
+# These are the exact versions installed and import-verified in this project's
+# virtual environment (Python 3.11.16). Verified again at Phase 9 by re-running
+# the pipeline from the pinned environment.
+
+# --- core data handling ---
+pandas==3.1.1
+numpy==2.4.6
+scipy==1.17.1
+pyarrow==26.0.1          # parquet read/write for the dashboard files
+
+# --- machine learning ---
+scikit-learn==1.9.1
+lightgbm==4.7.0
+xgboost==3.2.0           # installed and available; LightGBM was used, see PROJECT_GUIDE 8
+
+# --- calendar features ---
+holidays==0.108
+
+# --- interpretability ---
+shap==0.51.0
+
+# --- dashboard and plotting ---
+streamlit==1.67.0
+plotly==7.1.0
+matplotlib==3.11.2
+seaborn==0.13.2
+
+# --- persistence ---
+joblib==1.6.0
+
+# --- optional, not required to run v1 ---
+# statsmodels    # only for the optional SARIMA reference model (not used in v1)
+# jupyter        # notebooks/ exploration
+# nbconvert      # exporting notebooks to HTML for the viva portfolio
