@@ -47,7 +47,7 @@ def render(ctx: dict):
     all_labels = catalog["building_label"].tolist()
 
     # Controls Bar
-    with st.container():
+    with st.container(key="ce_filters"):
         ccol1, ccol2 = st.columns([3, 2])
         with ccol1:
             sel_labels = st.multiselect(
@@ -120,7 +120,7 @@ def render(ctx: dict):
     ])
 
     with tab_sum:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Comparative Operational Metrics</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Comparative Operational Metrics</h4>", unsafe_allow_html=True)
 
         forecast_metrics = load_csv_report("forecast_metrics")
         events_df = build_event_registry(tariff=tariff)
@@ -207,7 +207,7 @@ def render(ctx: dict):
         st.caption("▲ Highest value in cohort | ▼ Lowest value in cohort. Highlighted using font weight and markers (WCAG AA).")
 
     with tab_prof:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Daily 24-Hour Profile Overlay</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Daily 24-Hour Profile Overlay</h4>", unsafe_allow_html=True)
         fig_p = go.Figure()
         grp_prof = h_sub.groupby(["building_label", "hour"])["val"].mean().reset_index()
 
@@ -234,7 +234,7 @@ def render(ctx: dict):
         render_chart(fig_p, key="compare_profile")
 
     with tab_dist:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Hourly Load Spread (Box Plot)</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Hourly Load Spread (Box Plot)</h4>", unsafe_allow_html=True)
         fig_box = go.Figure()
         colors = CHART_THEME["compare"]
 
@@ -257,7 +257,7 @@ def render(ctx: dict):
         render_chart(fig_box, key="compare_box")
 
     with tab_corr:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Pearson Correlation Matrix</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Pearson Correlation Matrix</h4>", unsafe_allow_html=True)
         pivot_corr = h_sub.pivot_table(index="timestamp", columns="building_label", values="electricity").corr()
 
         fig_corr = go.Figure(data=go.Heatmap(

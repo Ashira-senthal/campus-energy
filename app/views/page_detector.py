@@ -91,7 +91,7 @@ def render(ctx: dict):
 
     # Prominent Evaluation Protocol Banner
     st.markdown("""
-<div style="background:var(--surface-alt);border-left:3px solid var(--warning);padding:10px 14px;border-radius:var(--radius-md);font-size:12px;margin:8px 0 16px 0;color:var(--text);">
+<div style="background:var(--surface-alt);border-left:3px solid var(--warning);padding:10px 14px;border-radius:var(--radius-md);font-size:14px;margin:8px 0 16px 0;color:var(--text);">
   <b>Evaluation Protocol Notice:</b> Anomaly detection evaluation is conducted on injected synthetic faults (spike, after-hours, flatline, drift), not unverified raw anomaly labels. Ground-truth evaluation prevents confirmation bias.
 </div>
 """, unsafe_allow_html=True)
@@ -106,7 +106,7 @@ def render(ctx: dict):
     st.markdown(ce_kpi_strip(kpis_html), unsafe_allow_html=True)
 
     # Primary View: Table of All Detectors
-    st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>All Detector Candidates Benchmark (z = 3.0, Injected Test Faults)</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>All Detector Candidates Benchmark (z = 3.0, Injected Test Faults)</h4>", unsafe_allow_html=True)
 
     d_headers = ["Detector Method", "Precision", "Recall", "F1 Score", "False-Alarm Rate %", "Operational Profile"]
     d_rows = []
@@ -176,7 +176,7 @@ def render(ctx: dict):
             render_chart(fig_fa, key="detector_false_alarm")
 
     with tab_fault:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Recall by Specific Fault Signature</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Recall by Specific Fault Signature</h4>", unsafe_allow_html=True)
         type_scores = det_scores[det_scores["anomaly_type"] != "ALL"].copy()
 
         if not type_scores.empty:
@@ -193,7 +193,7 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("Per-type fault scores not found."), unsafe_allow_html=True)
 
     with tab_sens:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Sensitivity Sweep: Robust z Threshold (2.0 to 5.0)</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Sensitivity Sweep: Robust z Threshold (2.0 to 5.0)</h4>", unsafe_allow_html=True)
         sens_df = load_csv_report("detection_sensitivity")
         if sens_df.empty:
             sens_df = load_parquet("sensitivity")
@@ -206,9 +206,9 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("reports/detection_sensitivity.csv not found."), unsafe_allow_html=True)
 
     with tab_notes:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Detector Mathematical Formulations</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Detector Mathematical Formulations</h4>", unsafe_allow_html=True)
         st.markdown("""
-<div style="font-size: 13px; color: var(--text); line-height: 1.6; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px;">
+<div style="font-size: 15px; color: var(--text); line-height: 1.6; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px;">
   <p><b>1. Residual (Robust z):</b> Evaluates <code>z = (residual - median) / (1.4826 · MAD)</code> where median and MAD are frozen from the validation fold. The 1.4826 scale factor equates MAD to Gaussian standard deviation while remaining impervious to extreme outliers (breakdown point ~50%).</p>
   <p><b>2. Residual + Persistence:</b> Single isolated anomalous hours are typically sensor dropouts or switching noise. Persistence requires that at least <code>k = 2</code> of the last <code>n = 3</code> hours exceed the threshold before raising an alert.</p>
   <p><b>3. Flatline Guard:</b> A frozen meter reading is physically implausible. A rolling standard deviation over 4 hours flags identical non-zero values (<code>rolling_std == 0 and value > 0</code>), catching comms failures that residuals miss.</p>

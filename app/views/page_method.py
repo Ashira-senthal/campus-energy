@@ -19,8 +19,8 @@ def render(ctx: dict):
 
     st.markdown("""
 <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:24px;box-shadow:var(--shadow-sm);">
-  <b style="font-size:14px;display:block;margin-bottom:8px;">Table of Contents</b>
-  <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;font-size:13px;">
+  <b style="font-size:17px;display:block;margin-bottom:8px;">Table of Contents</b>
+  <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;font-size:15px;">
     <a href="#1-problem-statement--framing" target="_self">1. Problem Statement & Framing</a>
     <a href="#2-data-telemetry--selection" target="_self">2. Data Telemetry & Selection</a>
     <a href="#3-chronological-splitting-protocol" target="_self">3. Chronological Splitting Protocol</a>

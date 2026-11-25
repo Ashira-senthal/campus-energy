@@ -51,7 +51,7 @@ def render(ctx: dict):
     tariff = float(ctx.get("tariff", 8.0))
 
     # Slim Filter Bar inside Streamlit Columns
-    with st.container():
+    with st.container(key="ce_filters"):
         fcol1, fcol2, fcol3, fcol4 = st.columns([3, 2, 2, 2])
 
         with fcol1:
@@ -153,9 +153,9 @@ def render(ctx: dict):
     flagged_hours = int(ev_sub["duration_h"].sum()) if not ev_sub.empty else 0
 
     kpis_html = "".join([
-        ce_metric_row("Total Consumption", fmt_kwh(tot_kwh), source="hourly.parquet"),
-        ce_metric_row("Peak Load", f"{peak_load:,.1f} kWh", delta=f"@ {peak_time}", delta_kind="neutral", source="hourly.parquet"),
-        ce_metric_row("Average Load", f"{avg_load:,.1f} kWh/h", delta=f"{len(sel_bids)} building(s)", delta_kind="neutral", source="hourly.parquet"),
+        ce_metric_row("Total Consumption", f"{tot_kwh:,.0f}", unit="kWh", source="hourly.parquet"),
+        ce_metric_row("Peak Load", f"{peak_load:,.1f}", unit="kWh", delta=f"@ {peak_time}", delta_kind="neutral", source="hourly.parquet"),
+        ce_metric_row("Average Load", f"{avg_load:,.1f}", unit="kWh/h", delta=f"{len(sel_bids)} building(s)", delta_kind="neutral", source="hourly.parquet"),
         ce_metric_row("Flagged Hours", f"{flagged_hours:,} h", delta=f"{len(ev_sub)} anomalies", delta_kind="warn" if flagged_hours > 0 else "pass", source="anomalies_clean_test.csv"),
     ])
     st.markdown(ce_kpi_strip(kpis_html), unsafe_allow_html=True)
@@ -188,7 +188,7 @@ def render(ctx: dict):
                 subtitle=f"Resolution: {resolution} | Model: {model} | Uncertainty: expected ± 3.0σ robust scale",
                 show_uncertainty=(resolution == "Hourly"),
                 uncertainty_scale=u_scale,
-                show_rangeslider=True,
+                show_rangeslider=False,
                 height=480,
             )
             render_chart(fig, key="live_primary")

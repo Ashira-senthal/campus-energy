@@ -85,7 +85,7 @@ def render(ctx: dict):
     kpis_html = "".join([
         ce_metric_row("Active Model", active_model, delta="Supervised ML", delta_kind="neutral", source="src/config.py"),
         ce_metric_row("CV(RMSE) %", f"{cv_rmse_val:.2f}%", delta="ASHRAE ≤ 30% [PASS]" if pass_cv else "ASHRAE ≤ 30% [FAIL]", delta_kind="pass" if pass_cv else "fail", source="reports/forecast_metrics.csv"),
-        ce_metric_row("Mean Absolute Error", f"{mae_val:.2f} kWh", delta="Hourly mean error", delta_kind="neutral", source="reports/forecast_metrics.csv"),
+        ce_metric_row("Mean Absolute Error", f"{mae_val:.2f}", unit="kWh", delta="Hourly mean error", delta_kind="neutral", source="reports/forecast_metrics.csv"),
         ce_metric_row("NMBE % (Bias)", f"{nmbe_val:+.2f}%", delta=f"ASHRAE ±10% [{ashrae_status}]", delta_kind="pass" if pass_nmbe else "fail", source="reports/forecast_metrics.csv"),
     ])
     st.markdown(ce_kpi_strip(kpis_html), unsafe_allow_html=True)
@@ -101,7 +101,7 @@ def render(ctx: dict):
     ])
 
     with tab_scores:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Overall Model Comparison (Test Fold: Sep–Dec 2017)</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Overall Model Comparison (Test Fold: Sep–Dec 2017)</h4>", unsafe_allow_html=True)
 
         # Average over buildings for each model
         agg_models = test_metrics.groupby("model").agg(
@@ -153,7 +153,7 @@ def render(ctx: dict):
         )
 
         st.markdown("""
-<div style="background:var(--surface-alt);border-left:3px solid var(--positive);padding:10px 14px;border-radius:var(--radius-md);font-size:12px;margin:12px 0 16px 0;">
+<div style="background:var(--surface-alt);border-left:3px solid var(--positive);padding:10px 14px;border-radius:var(--radius-md);font-size:14px;margin:12px 0 16px 0;">
   <b>Empirically Verified Finding:</b> Every learned model (Random Forest, Ridge, LightGBM) comfortably beats both seasonal-naive baselines (t-168h and t-24h), confirming feature utility and satisfying the baseline rejection criterion.
 </div>
 """, unsafe_allow_html=True)
@@ -163,7 +163,7 @@ def render(ctx: dict):
         render_chart(fig_bar, key="model_scores")
 
         # Building x Model Matrix Breakdown
-        st.markdown("<h4 style='font-size: 14px; margin: 16px 0 8px 0;'>Building × Model CV(RMSE) % Matrix</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin: 16px 0 8px 0;'>Building × Model CV(RMSE) % Matrix</h4>", unsafe_allow_html=True)
         matrix = test_metrics.pivot_table(index="building_label", columns="model", values="cv_rmse_pct")
         if not matrix.empty:
             mat_headers = ["Building"] + list(matrix.columns)
@@ -173,7 +173,7 @@ def render(ctx: dict):
             st.markdown(ce_table(mat_headers, mat_rows, source="reports/forecast_metrics.csv"), unsafe_allow_html=True)
 
     with tab_fvsa:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Predicted vs Actual Load Alignment</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Predicted vs Actual Load Alignment</h4>", unsafe_allow_html=True)
 
         scol1, scol2 = st.columns(2)
         with scol1:
@@ -208,7 +208,7 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("data/processed/predictions.parquet not found."), unsafe_allow_html=True)
 
     with tab_res:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Residual Diagnostic Battery (Where and When Does the Model Miss?)</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Residual Diagnostic Battery (Where and When Does the Model Miss?)</h4>", unsafe_allow_html=True)
 
         residuals_df = load_parquet("residuals")
         if not residuals_df.empty:
@@ -262,7 +262,7 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("data/processed/residuals.parquet not found."), unsafe_allow_html=True)
 
     with tab_cfg:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Exact Pipeline and Model Configuration Audit</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Exact Pipeline and Model Configuration Audit</h4>", unsafe_allow_html=True)
 
         summary = load_pipeline_summary()
 
@@ -316,7 +316,7 @@ def render(ctx: dict):
             st.markdown(ce_table(["Library Package", "Pinned Version"], req_rows[:7], source="requirements.txt"), unsafe_allow_html=True)
 
     with tab_imp:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Feature Importance Comparison: Tree Native vs SHAP Attributions</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Feature Importance Comparison: Tree Native vs SHAP Attributions</h4>", unsafe_allow_html=True)
         shap_imp = load_csv_report("shap_importance")
         if not shap_imp.empty:
             andre_imp = shap_imp[shap_imp["building_id"] == "Fox_education_Andre"].head(10)
@@ -334,9 +334,9 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("Importance scores not available."), unsafe_allow_html=True)
 
     with tab_limit:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>System Limitations and Threats to Validity</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>System Limitations and Threats to Validity</h4>", unsafe_allow_html=True)
         st.markdown("""
-<div style="font-size: 13px; color: var(--text); line-height: 1.6; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px;">
+<div style="font-size: 15px; color: var(--text); line-height: 1.6; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px;">
   <ul style="margin: 0; padding-left: 20px;">
     <li><b>Single Geographical Site:</b> All four buildings belong to BDG2 site <code>Fox</code> in the US/Mountain timezone. While usage types differ widely (laboratory, student union, classroom, auditorium), findings do not automatically transfer to non-US climatic or tariff zones.</li>
     <li><b>Lack of Academic Term Schedules:</b> The BDG2 dataset does not contain academic calendar metadata. Term starts, reading weeks, and exam schedules are invisible to features, resulting in elevated false alarms during early autumn term ramp-up.</li>

@@ -5,6 +5,8 @@ Single-building deep dive into telemetry, forecast accuracy, anomalies, and carb
 
 from __future__ import annotations
 
+import html
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -87,36 +89,34 @@ def render(ctx: dict):
 
     # Header Card
     st.markdown(f"""
-<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:20px;box-shadow:var(--shadow-sm);">
-  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--surface-alt);padding-bottom:10px;margin-bottom:12px;">
+<div class="ce-building-card">
+  <div class="ce-building-card__head">
     <div>
-      <span style="font-size:18px;font-weight:700;color:var(--text);">{b_info['building_label']}</span>
-      <span style="font-size:13px;color:var(--text-muted);margin-left:12px;">Usage: <b>{b_info['usage']}</b></span>
+      <span class="ce-building-card__name">{html.escape(b_info['building_label'])}</span>
+      <span class="ce-building-card__usage">Usage: <b>{html.escape(str(b_info['usage']))}</b></span>
     </div>
-    <span style="font-size:12px;background:var(--surface-alt);padding:3px 8px;border-radius:var(--radius-pill);border:1px solid var(--border);font-family:var(--font-mono);">
-      Site Fox · BDG2
-    </span>
+    <span class="ce-building-card__badge">Site Fox · BDG2</span>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(5, 1fr);gap:16px;">
+  <div class="ce-building-card__grid">
     <div>
-      <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:600;">Floor Area</div>
-      <div style="font-size:15px;font-weight:600;color:var(--text);">{sqm:,.0f} m²</div>
+      <div class="ce-building-card__label">Floor Area</div>
+      <div class="ce-building-card__value">{sqm:,.0f} m²</div>
     </div>
     <div>
-      <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:600;">Mean Load</div>
-      <div style="font-size:15px;font-weight:600;color:var(--text);">{mean_load:,.1f} kWh/h</div>
+      <div class="ce-building-card__label">Mean Load</div>
+      <div class="ce-building-card__value">{mean_load:,.1f} kWh/h</div>
     </div>
     <div>
-      <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:600;">Peak Observed</div>
-      <div style="font-size:15px;font-weight:600;color:var(--text);">{peak_load:,.1f} kWh/h</div>
+      <div class="ce-building-card__label">Peak Observed</div>
+      <div class="ce-building-card__value">{peak_load:,.1f} kWh/h</div>
     </div>
     <div>
-      <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:600;">Intensity</div>
-      <div style="font-size:15px;font-weight:600;color:var(--text);">{load_per_sqm:,.2f} W/m²</div>
+      <div class="ce-building-card__label">Intensity</div>
+      <div class="ce-building-card__value">{load_per_sqm:,.2f} W/m²</div>
     </div>
     <div>
-      <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:600;">Data Coverage</div>
-      <div style="font-size:15px;font-weight:600;color:var(--positive);">{cov_str}</div>
+      <div class="ce-building-card__label">Data Coverage</div>
+      <div class="ce-building-card__value ce-building-card__value--positive">{cov_str}</div>
     </div>
   </div>
 </div>
@@ -139,7 +139,7 @@ def render(ctx: dict):
             subtitle=f"Model: {model} | Uncertainty: expected ± 3.0σ ({u_scale:.1f} kWh)",
             show_uncertainty=True,
             uncertainty_scale=u_scale,
-            show_rangeslider=True,
+            show_rangeslider=False,
             height=420,
         )
         render_chart(fig_main, key="building_primary")
@@ -174,7 +174,7 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("No profile telemetry available."), unsafe_allow_html=True)
 
     with tab_acc:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Candidate Model Benchmark for this Building (Test Fold: Sep–Dec 2017)</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Candidate Model Benchmark for this Building (Test Fold: Sep–Dec 2017)</h4>", unsafe_allow_html=True)
         forecast_metrics = load_csv_report("forecast_metrics")
         if not forecast_metrics.empty:
             b_metrics = forecast_metrics[
@@ -220,7 +220,7 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("reports/forecast_metrics.csv not found."), unsafe_allow_html=True)
 
     with tab_anom:
-        st.markdown(f"<h4 style='font-size: 14px; margin-bottom: 8px;'>Flagged Incidents for {b_info['short_name']}</h4>", unsafe_allow_html=True)
+        st.markdown(f"<h4 style='font-size: 17px; margin-bottom: 8px;'>Flagged Incidents for {b_info['short_name']}</h4>", unsafe_allow_html=True)
         if not b_events.empty:
             a_headers = ["Event ID", "Start", "End", "Dur", "Type", "Severity", "Peak z", "Excess kWh", "Cost (₹)", "Status"]
             a_rows = []
@@ -252,7 +252,7 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("No anomalies flagged for this building in selected range."), unsafe_allow_html=True)
 
     with tab_cost:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Monthly Excess Waste, Tariff Consequence, and Emissions</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Monthly Excess Waste, Tariff Consequence, and Emissions</h4>", unsafe_allow_html=True)
         if not b_events.empty:
             b_events_copy = b_events.copy()
             b_events_copy["month"] = b_events_copy["start"].dt.strftime("%Y-%m")

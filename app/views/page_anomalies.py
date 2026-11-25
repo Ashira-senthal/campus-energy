@@ -57,7 +57,7 @@ def render(ctx: dict):
     url_event_id = st.query_params.get("event")
 
     # Filter Bar
-    with st.container():
+    with st.container(key="ce_filters"):
         fcol1, fcol2, fcol3, fcol4, fcol5 = st.columns([2, 2, 2, 2, 2])
 
         with fcol1:
@@ -113,7 +113,7 @@ def render(ctx: dict):
     kpis_html = "".join([
         ce_metric_row("Total Events", f"{tot_events:,}", delta=f"{len(events_df)} total in registry", delta_kind="neutral", source="reports/anomalies_clean_test.csv"),
         ce_metric_row("Open (Unreviewed)", f"{open_events:,}", delta="Requires review" if open_events > 0 else "All resolved", delta_kind="warn" if open_events > 0 else "pass", source="data/processed/anomaly_reviews.csv"),
-        ce_metric_row("Excess Energy", fmt_kwh(tot_excess), delta=f"~{tot_excess * co2_factor:,.1f} kg CO₂", delta_kind="neutral", source="anomalies_clean_test.csv"),
+        ce_metric_row("Excess Energy", f"{tot_excess:,.1f}", unit="kWh", delta=f"~{tot_excess * co2_factor:,.1f} kg CO₂", delta_kind="neutral", source="anomalies_clean_test.csv"),
         ce_metric_row("Estimated Impact", fmt_inr(tot_cost), delta=f"Tariff ₹{tariff:.2f}/kWh", delta_kind="warn" if tot_cost > 0 else "neutral", source="excess_kWh × tariff"),
     ])
     st.markdown(ce_kpi_strip(kpis_html), unsafe_allow_html=True)
@@ -127,18 +127,17 @@ def render(ctx: dict):
     ])
 
     with tab_events:
-        col_list, col_detail = st.columns([5, 4])
+        st.markdown("<h4 style='margin: 0 0 10px 0; font-size: 17px;'>Filtered Incident Records</h4>", unsafe_allow_html=True)
 
-        with col_list:
-            st.markdown("<h4 style='margin: 0 0 8px 0; font-size: 14px;'>Filtered Incident Records</h4>", unsafe_allow_html=True)
+        if not filtered.empty:
+            # Event selection dropdown for investigation
+            event_ids = filtered["event_id"].tolist()
+            default_idx = 0
+            if url_event_id and url_event_id in event_ids:
+                default_idx = event_ids.index(url_event_id)
 
-            if not filtered.empty:
-                # Event selection dropdown for investigation
-                event_ids = filtered["event_id"].tolist()
-                default_idx = 0
-                if url_event_id and url_event_id in event_ids:
-                    default_idx = event_ids.index(url_event_id)
-
+            sel_col, page_col = st.columns([4, 1])
+            with sel_col:
                 selected_eid = st.selectbox(
                     "Select Event to Inspect & Review",
                     event_ids,
@@ -147,59 +146,65 @@ def render(ctx: dict):
                     format_func=lambda eid: f"{eid} — {filtered[filtered['event_id']==eid]['building_label'].iloc[0]} ({filtered[filtered['event_id']==eid]['type'].iloc[0]}, {filtered[filtered['event_id']==eid]['severity'].iloc[0]})",
                 )
 
-                # Pagination setup (25 rows)
-                page_size = 25
-                total_pages = max(1, (len(filtered) - 1) // page_size + 1)
+            # Pagination setup (25 rows)
+            page_size = 25
+            total_pages = max(1, (len(filtered) - 1) // page_size + 1)
+            with page_col:
                 page_num = st.number_input("Page", min_value=1, max_value=total_pages, value=1, step=1, key="anom_page_num")
-                start_idx = (page_num - 1) * page_size
-                page_rows = filtered.iloc[start_idx : start_idx + page_size]
 
-                # Format Table
-                headers = ["Event ID", "Building", "Start", "Dur", "Type", "Sev", "Peak z", "Excess", "₹ Impact", "Status"]
-                rows = []
-                for _, r in page_rows.iterrows():
-                    is_active = (r["event_id"] == selected_eid)
-                    prefix = "▶ " if is_active else ""
-                    id_cell = f"<span style='font-family:var(--font-mono);font-weight:600;'>{prefix}{r['event_id']}</span>"
-                    b_short = building_id_to_short(r["building_id"])
-                    start_str = r["start"].strftime("%Y-%m-%d %H:%M")
-                    dur_str = f"{r['duration_h']}h"
-                    t_tag = ce_tag(r["type"], r["type"])
-                    s_tag = ce_tag(r["severity"], r["severity"])
-                    z_str = f"{r['peak_z']:.2f}"
-                    exc_str = f"{r['excess_kWh']:,.1f}"
-                    cost_str = f"₹{r['est_cost_INR']:,.0f}"
-                    stat_tag = ce_tag(r["review_status"], r["review_status"])
+            start_idx = (page_num - 1) * page_size
+            page_rows = filtered.iloc[start_idx : start_idx + page_size]
 
-                    rows.append([id_cell, b_short, start_str, dur_str, t_tag, s_tag, z_str, exc_str, cost_str, stat_tag])
+            # Format Table
+            headers = ["Event ID", "Building", "Start", "Dur", "Type", "Sev", "Peak z", "Excess", "₹ Impact", "Status"]
+            rows = []
+            for _, r in page_rows.iterrows():
+                is_active = (r["event_id"] == selected_eid)
+                prefix = "▶ " if is_active else ""
+                id_cell = f"<span style='font-family:var(--font-mono);font-weight:600;'>{prefix}{r['event_id']}</span>"
+                b_short = building_id_to_short(r["building_id"])
+                start_str = r["start"].strftime("%Y-%m-%d %H:%M")
+                dur_str = f"{r['duration_h']}h"
+                t_tag = ce_tag(r["type"], r["type"])
+                s_tag = ce_tag(r["severity"], r["severity"])
+                z_str = f"{r['peak_z']:.2f}"
+                exc_str = f"{r['excess_kWh']:,.1f}"
+                cost_str = f"₹{r['est_cost_INR']:,.0f}"
+                stat_tag = ce_tag(r["review_status"], r["review_status"])
 
-                st.markdown(
-                    ce_table(headers, rows, sort_keys=["id", "bld", "start", "dur", "type", "sev", "z", "excess", "cost", "status"]),
-                    unsafe_allow_html=True,
-                )
-                st.caption(f"Showing {start_idx+1}–{min(start_idx+page_size, len(filtered))} of {len(filtered)} events. Select an event above to open detail panel.")
+                rows.append([id_cell, b_short, start_str, dur_str, t_tag, s_tag, z_str, exc_str, cost_str, stat_tag])
 
-                # Export CSV button
-                csv_bytes = filtered.to_csv(index=False).encode("utf-8")
-                st.download_button(
-                    "⬇ Download filtered registry (CSV)",
-                    data=csv_bytes,
-                    file_name="campus_energy_anomaly_registry.csv",
-                    mime="text/csv",
-                    key="export_registry_csv",
-                )
-            else:
-                st.markdown(ce_empty_message("No events match the selected filters."), unsafe_allow_html=True)
+            st.markdown(
+                ce_table(headers, rows, sort_keys=["id", "bld", "start", "dur", "type", "sev", "z", "excess", "cost", "status"]),
+                unsafe_allow_html=True,
+            )
+            st.caption(f"Showing {start_idx+1}–{min(start_idx+page_size, len(filtered))} of {len(filtered)} events. Select an event above to open detail panel.")
 
-        with col_detail:
-            st.markdown("<h4 style='margin: 0 0 8px 0; font-size: 14px;'>Incident Investigation & Triage</h4>", unsafe_allow_html=True)
-            if not filtered.empty and selected_eid:
-                ev_row = filtered[filtered["event_id"] == selected_eid].iloc[0]
+            # Export CSV button
+            csv_bytes = filtered.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                "⬇ Download filtered registry (CSV)",
+                data=csv_bytes,
+                file_name="campus_energy_anomaly_registry.csv",
+                mime="text/csv",
+                key="export_registry_csv",
+            )
+        else:
+            st.markdown(ce_empty_message("No events match the selected filters."), unsafe_allow_html=True)
 
+        st.markdown("<hr style='border:none;border-top:1px solid var(--border-subtle);margin:24px 0;'>", unsafe_allow_html=True)
+        st.markdown("<h4 style='margin: 0 0 12px 0; font-size: 17px;'>Incident Investigation & Triage</h4>", unsafe_allow_html=True)
+
+        if not filtered.empty and selected_eid:
+            ev_row = filtered[filtered["event_id"] == selected_eid].iloc[0]
+
+            detail_col, review_col = st.columns([3, 2])
+
+            with detail_col:
                 # Plain-English Explanation Card
                 st.markdown(f"""
-<div style="background:var(--surface-alt);border-left:3px solid var(--accent);padding:12px;border-radius:var(--radius-md);font-size:13px;margin-bottom:12px;line-height:1.4;">
-  <b>Diagnostic Summary:</b> {ev_row['explanation']}
+<div style="background:var(--surface-2);border-left:3px solid var(--accent);padding:14px 18px;border-radius:0 var(--radius-md) var(--radius-md) 0;font-size:15px;margin-bottom:16px;line-height:1.6;color:var(--text-secondary);">
+  <b style="color:var(--text-primary);">Diagnostic Summary:</b> {ev_row['explanation']}
 </div>
 """, unsafe_allow_html=True)
 
@@ -221,9 +226,8 @@ def render(ctx: dict):
                 with m3:
                     st.metric("Cost Consequence", fmt_inr(ev_row["est_cost_INR"]))
 
-                # Review Controls
-                st.markdown("<hr style='border:none;border-top:1px solid var(--border);margin:12px 0;'>", unsafe_allow_html=True)
-                st.markdown("<b>Auditor Review Decision:</b>", unsafe_allow_html=True)
+            with review_col:
+                st.markdown("<b style='font-size:16px;'>Auditor Review Decision</b>", unsafe_allow_html=True)
 
                 current_status = ev_row.get("review_status", "New")
                 current_note = ev_row.get("reviewer_note", "")
@@ -243,7 +247,7 @@ def render(ctx: dict):
                     value=current_note if pd.notna(current_note) else "",
                     placeholder="e.g. Schedule override identified on AHU-2; verified with facility log.",
                     key=f"note_area_{selected_eid}",
-                    height=75,
+                    height=110,
                 )
 
                 if st.button("Save Review Label", key=f"save_btn_{selected_eid}", type="primary"):
@@ -257,7 +261,7 @@ def render(ctx: dict):
                     st.caption(f"Last updated: {ev_row['last_updated']}")
 
     with tab_by_type:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Anomaly Volume and Energy Waste by Failure Mode</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Anomaly Volume and Energy Waste by Failure Mode</h4>", unsafe_allow_html=True)
         if not filtered.empty:
             type_grp = filtered.groupby("type").agg(
                 count=("event_id", "count"),
@@ -285,7 +289,7 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("No events in this category."), unsafe_allow_html=True)
 
     with tab_timeline:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Incident Timeline Across Buildings</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Incident Timeline Across Buildings</h4>", unsafe_allow_html=True)
         if not filtered.empty:
             fig_tl = go.Figure()
             colors = {

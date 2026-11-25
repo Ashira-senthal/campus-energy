@@ -48,7 +48,7 @@ def render(ctx: dict):
         missing_pct = 0.0
 
     kpis_html = "".join([
-        ce_metric_row("Hours Covered", f"{tot_hours:,} h", delta="2 full years (2016–2017)", delta_kind="neutral", source="data/raw/electricity_cleaned.csv"),
+        ce_metric_row("Hours Covered", f"{tot_hours:,}", unit="h", delta="2 full years (2016–2017)", delta_kind="neutral", source="data/raw/electricity_cleaned.csv"),
         ce_metric_row("Monitored Buildings", f"{tot_blds}", delta="Fox education cohort", delta_kind="neutral", source="reports/building_coverage.csv"),
         ce_metric_row("Missing Unfilled", f"{missing_pct:.3f}%", delta="99.998% complete after repair", delta_kind="pass", source="reports/building_quality.csv"),
         ce_metric_row("Date Range", "2016 → 2017", delta="24 chronological months", delta_kind="neutral", source="hourly.parquet"),
@@ -56,7 +56,7 @@ def render(ctx: dict):
     st.markdown(ce_kpi_strip(kpis_html), unsafe_allow_html=True)
 
     # Primary View: Data Coverage Chart
-    st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Telemetry Presence & Repair Status by Building</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Telemetry Presence & Repair Status by Building</h4>", unsafe_allow_html=True)
     if not quality_df.empty:
         fig_cov = fig_data_coverage(quality_df)
         render_chart(fig_cov, key="data_coverage")
@@ -75,7 +75,7 @@ def render(ctx: dict):
     ])
 
     with tab_src:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Building Data Genome Project 2 (BDG2) Details</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Building Data Genome Project 2 (BDG2) Details</h4>", unsafe_allow_html=True)
 
         src_table = [
             ("Dataset Name", "Building Data Genome Project 2 (BDG2)"),
@@ -90,7 +90,7 @@ def render(ctx: dict):
         st.markdown(ce_table(["Attribute", "Specification"], src_table, source="PROJECT_GUIDE.md Section 4"), unsafe_allow_html=True)
 
     with tab_clean:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Cleaning Pipeline (src/features.py clean_panel)</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Cleaning Pipeline (src/features.py clean_panel)</h4>", unsafe_allow_html=True)
 
         if not quality_df.empty:
             q_headers = ["Building ID", "Total Hours", "Raw Present", "Repaired Gaps (≤3h)", "Unfilled Missing", "Final Completeness %", "Zero Hours"]
@@ -108,7 +108,7 @@ def render(ctx: dict):
             st.markdown(ce_table(q_headers, q_rows, source="reports/building_quality.csv"), unsafe_allow_html=True)
 
         st.markdown("""
-<div style="font-size: 13px; color: var(--text); line-height: 1.6; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-top: 12px;">
+<div style="font-size: 15px; color: var(--text); line-height: 1.6; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-top: 12px;">
   <b>Three-Stage Cleaning Rules:</b>
   <ol style="margin: 0; padding-left: 20px;">
     <li><b>Full Calendar Reindexing:</b> The raw time series is reindexed to an unbroken hourly grid between 2016-01-01 00:00 and 2017-12-31 23:00 (17,544 timestamps). This ensures that autoregressive lag shifts represent true elapsed time.</li>
@@ -119,7 +119,7 @@ def render(ctx: dict):
 """, unsafe_allow_html=True)
 
     with tab_feat:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Engineered Input Feature Schema</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Engineered Input Feature Schema</h4>", unsafe_allow_html=True)
         feat_rows = [
             ("hour", "Calendar", "Hour of day (0–23)"),
             ("dayofweek", "Calendar", "Day of week (0=Mon, 6=Sun)"),
@@ -145,7 +145,7 @@ def render(ctx: dict):
         st.markdown(ce_table(["Feature Name", "Domain", "Description"], feat_rows, source="src/features.py"), unsafe_allow_html=True)
 
     with tab_sample:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Paginated Telemetry Preview (data/processed/hourly.parquet)</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Paginated Telemetry Preview (data/processed/hourly.parquet)</h4>", unsafe_allow_html=True)
         hourly_df = load_parquet("hourly")
         if not hourly_df.empty:
             sample_page = st.number_input("Sample Page", min_value=1, max_value=len(hourly_df)//25, value=1, step=1, key="sample_page_num")

@@ -33,7 +33,7 @@ def render(ctx: dict):
     DEFAULT_DETECTOR = "hybrid"
     DEFAULT_HOLIDAY = "US"
 
-    st.markdown("<h4 style='font-size: 14px; margin-bottom: 12px;'>Editable Assumptions and Thresholds</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-size: 17px; margin-bottom: 12px;'>Editable Assumptions and Thresholds</h4>", unsafe_allow_html=True)
 
     with st.form("settings_form"):
         col1, col2 = st.columns(2)
@@ -124,7 +124,7 @@ def render(ctx: dict):
         st.rerun()
 
     st.markdown("<hr style='border:none;border-top:1px solid var(--border);margin:24px 0;'>", unsafe_allow_html=True)
-    st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Active Configuration State (JSON)</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Active Configuration State (JSON)</h4>", unsafe_allow_html=True)
 
     config_view = {
         "site_id": "Fox",

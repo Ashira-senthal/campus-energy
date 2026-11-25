@@ -44,7 +44,7 @@ def render(ctx: dict):
     labels = catalog["building_label"].tolist()
 
     # Top Selector Bar
-    with st.container():
+    with st.container(key="ce_filters"):
         ecol1, ecol2 = st.columns([3, 2])
         with ecol1:
             sel_label = st.selectbox(
@@ -67,7 +67,7 @@ def render(ctx: dict):
 
     # Interpretation Caution Alert
     st.markdown("""
-<div style="background:var(--surface-alt);border-left:3px solid var(--info);padding:10px 14px;border-radius:var(--radius-md);font-size:12px;margin:12px 0 20px 0;color:var(--text-muted);">
+<div style="background:var(--surface-alt);border-left:3px solid var(--info);padding:10px 14px;border-radius:var(--radius-md);font-size:14px;margin:12px 0 20px 0;color:var(--text-muted);">
   <b>Interpretation Caution:</b> SHAP explains what drove the statistical model's prediction given its training features; it does not prove physical causation or mechanical causality in the facility.
 </div>
 """, unsafe_allow_html=True)
@@ -95,7 +95,7 @@ def render(ctx: dict):
     ])
 
     with tab_dep:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Marginal Feature Dependence (Attribution vs Value)</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Marginal Feature Dependence (Attribution vs Value)</h4>", unsafe_allow_html=True)
 
         shap_df = load_parquet("shap")
         if not shap_df.empty:
@@ -111,7 +111,7 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("Detailed hourly SHAP attribution dataset not loaded."), unsafe_allow_html=True)
 
     with tab_single:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Single Incident Hour Decomposition</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Single Incident Hour Decomposition</h4>", unsafe_allow_html=True)
 
         # Lookup base value
         thresh = get_building_thresholds()
@@ -172,7 +172,7 @@ def render(ctx: dict):
             st.markdown(ce_empty_message("data/processed/shap.parquet not available."), unsafe_allow_html=True)
 
     with tab_gloss:
-        st.markdown("<h4 style='font-size: 14px; margin-bottom: 8px;'>Engineered Input Feature Registry (Lag ≥ 24h Guard)</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 17px; margin-bottom: 8px;'>Engineered Input Feature Registry (Lag ≥ 24h Guard)</h4>", unsafe_allow_html=True)
 
         features_data = [
             ("hour", "Calendar", "Hour of day (0–23)", "int32", "Knowable at t=0"),
@@ -207,7 +207,7 @@ def render(ctx: dict):
             unsafe_allow_html=True,
         )
         st.markdown("""
-<div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+<div style="font-size: 14px; color: var(--text-muted); margin-top: 8px;">
   <b>The Lag ≥ 24h Rule:</b> No electricity feature may use information from less than 24 hours prior to prediction time.
   If the model were allowed to use <code>kWh(t-1)</code>, ongoing faults would be learned as normal behavior, causing the residual to collapse to zero exactly when an anomaly alarm is required.
 </div>

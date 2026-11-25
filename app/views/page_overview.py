@@ -66,17 +66,19 @@ def render(ctx: dict):
     if not series_df.empty and "actual" in series_df.columns and "expected" in series_df.columns:
         tot_act = float(series_df["actual"].sum())
         tot_exp = float(series_df["expected"].dropna().sum())
+        cons_unit = "kWh"
         if tot_exp > 0:
             diff_pct = ((tot_act - tot_exp) / tot_exp) * 100.0
             delta_str = f"{diff_pct:+.1f}% vs model"
             delta_kind = "fail" if diff_pct > 5.0 else ("warn" if diff_pct > 0 else "pass")
-            cons_val = f"{tot_act:,.0f} kWh"
+            cons_val = f"{tot_act:,.0f}"
         else:
-            cons_val = f"{tot_act:,.0f} kWh"
+            cons_val = f"{tot_act:,.0f}"
             delta_str = "No expectation"
             delta_kind = "neutral"
     else:
         cons_val = "—"
+        cons_unit = None
         delta_str = None
         delta_kind = "neutral"
 
@@ -94,6 +96,7 @@ def render(ctx: dict):
         ce_metric_row(
             label="Total Consumption",
             value=cons_val,
+            unit=cons_unit,
             delta=delta_str,
             delta_kind=delta_kind,
             source="hourly.parquet + predictions.parquet",
@@ -143,72 +146,68 @@ def render(ctx: dict):
     else:
         st.markdown(ce_empty_message("No telemetry data found for the selected buildings and range."), unsafe_allow_html=True)
 
-    # Secondary Views: Two compact blocks (Latest Anomalies + Building Status)
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown("<h3 class='ce-section-title'>Latest Anomalies</h3>", unsafe_allow_html=True)
-        if not ev_sub.empty:
-            latest = ev_sub.sort_values("start", ascending=False).head(5)
-            headers = ["Event ID", "Building", "Start", "Type", "Severity", "Cost (₹)"]
-            rows = []
-            for _, r in latest.iterrows():
-                link_html = f'<a href="?page=anomalies&event={r["event_id"]}" target="_self" style="font-weight:600">{r["event_id"]}</a>'
-                b_short = building_id_to_short(r["building_id"])
-                start_str = r["start"].strftime("%Y-%m-%d %H:%M")
-                type_tag = ce_tag(r["type"], r["type"])
-                sev_tag = ce_tag(r["severity"], r["severity"])
-                cost_str = f"₹{r['est_cost_INR']:,.0f}"
-                rows.append([link_html, b_short, start_str, type_tag, sev_tag, cost_str])
-
-            st.markdown(
-                ce_table(headers, rows, sort_keys=["id", "bld", "start", "type", "sev", "cost"], source="reports/anomalies_clean_test.csv"),
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                '<div style="margin-top: 6px; font-size: 12px;"><a href="?page=anomalies" target="_self">View all anomalies in registry ›</a></div>',
-                unsafe_allow_html=True,
-            )
-        else:
-            st.markdown(ce_card("Latest Anomalies", ce_empty_message("No anomalies detected in selected range.")), unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("<h3 class='ce-section-title'>Building Status</h3>", unsafe_allow_html=True)
-        forecast_metrics = load_csv_report("forecast_metrics")
-        tot_mean_load = sum(b["mean_kwh"] for b in catalog.to_dict("records"))
-
-        b_headers = ["Building", "Mean Load", "Share", "Flags", "CV(RMSE)"]
-        b_rows = []
-
-        for b in catalog.to_dict("records"):
-            bid = b["building_id"]
-            short_lbl = b["short_name"]
-            mean_load = b["mean_kwh"]
-            share_pct = (mean_load / tot_mean_load * 100.0) if tot_mean_load > 0 else 0.0
-
-            # Count flags for this building in range
-            b_flags = int(ev_sub[ev_sub["building_id"] == bid]["duration_h"].sum()) if not ev_sub.empty else 0
-
-            # Lookup CV(RMSE) for test fold and active model
-            cv_rmse_str = "—"
-            if not forecast_metrics.empty:
-                m_sub = forecast_metrics[
-                    (forecast_metrics["building_id"] == bid) &
-                    (forecast_metrics["fold"] == "test") &
-                    (forecast_metrics["model"] == model)
-                ]
-                if not m_sub.empty and pd.notna(m_sub.iloc[0]["cv_rmse_pct"]):
-                    cv_rmse_str = f"{m_sub.iloc[0]['cv_rmse_pct']:.2f}%"
-
-            b_rows.append([
-                short_lbl,
-                f"{mean_load:,.1f} kWh",
-                f"{share_pct:.1f}%",
-                f"{b_flags:,} h",
-                cv_rmse_str,
-            ])
+    # Secondary Views: full-width blocks so the tables stay readable
+    st.markdown("<h3 class='ce-section-title'>Latest Anomalies</h3>", unsafe_allow_html=True)
+    if not ev_sub.empty:
+        latest = ev_sub.sort_values("start", ascending=False).head(5)
+        headers = ["Event ID", "Building", "Start", "Type", "Severity", "Cost (₹)"]
+        rows = []
+        for _, r in latest.iterrows():
+            link_html = f'<a href="?page=anomalies&event={r["event_id"]}" target="_self" style="font-weight:600">{r["event_id"]}</a>'
+            b_short = building_id_to_short(r["building_id"])
+            start_str = r["start"].strftime("%Y-%m-%d %H:%M")
+            type_tag = ce_tag(r["type"], r["type"])
+            sev_tag = ce_tag(r["severity"], r["severity"])
+            cost_str = f"₹{r['est_cost_INR']:,.0f}"
+            rows.append([link_html, b_short, start_str, type_tag, sev_tag, cost_str])
 
         st.markdown(
-            ce_table(b_headers, b_rows, sort_keys=["bld", "load", "share", "flags", "cvrmse"], source="reports/forecast_metrics.csv (test fold)"),
+            ce_table(headers, rows, sort_keys=["id", "bld", "start", "type", "sev", "cost"], source="reports/anomalies_clean_test.csv"),
             unsafe_allow_html=True,
         )
+        st.markdown(
+            '<div style="margin-top: 10px; font-size: 14.5px;"><a href="?page=anomalies" target="_self">View all anomalies in registry ›</a></div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(ce_card("Latest Anomalies", ce_empty_message("No anomalies detected in selected range.")), unsafe_allow_html=True)
+
+    st.markdown("<h3 class='ce-section-title'>Building Status</h3>", unsafe_allow_html=True)
+    forecast_metrics = load_csv_report("forecast_metrics")
+    tot_mean_load = sum(b["mean_kwh"] for b in catalog.to_dict("records"))
+
+    b_headers = ["Building", "Mean Load", "Share", "Flags", "CV(RMSE)"]
+    b_rows = []
+
+    for b in catalog.to_dict("records"):
+        bid = b["building_id"]
+        short_lbl = b["short_name"]
+        mean_load = b["mean_kwh"]
+        share_pct = (mean_load / tot_mean_load * 100.0) if tot_mean_load > 0 else 0.0
+
+        # Count flags for this building in range
+        b_flags = int(ev_sub[ev_sub["building_id"] == bid]["duration_h"].sum()) if not ev_sub.empty else 0
+
+        # Lookup CV(RMSE) for test fold and active model
+        cv_rmse_str = "—"
+        if not forecast_metrics.empty:
+            m_sub = forecast_metrics[
+                (forecast_metrics["building_id"] == bid) &
+                (forecast_metrics["fold"] == "test") &
+                (forecast_metrics["model"] == model)
+            ]
+            if not m_sub.empty and pd.notna(m_sub.iloc[0]["cv_rmse_pct"]):
+                cv_rmse_str = f"{m_sub.iloc[0]['cv_rmse_pct']:.2f}%"
+
+        b_rows.append([
+            short_lbl,
+            f"{mean_load:,.1f} kWh",
+            f"{share_pct:.1f}%",
+            f"{b_flags:,} h",
+            cv_rmse_str,
+        ])
+
+    st.markdown(
+        ce_table(b_headers, b_rows, sort_keys=["bld", "load", "share", "flags", "cvrmse"], source="reports/forecast_metrics.csv (test fold)"),
+        unsafe_allow_html=True,
+    )

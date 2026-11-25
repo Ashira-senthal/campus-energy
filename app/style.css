@@ -78,30 +78,30 @@
   --font-display: "Inter", "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Monaco, Consolas, monospace;
 
-  /* Standard desktop monitor typography scale (universal 16px desktop root) */
-  --fs-xs: 12.5px;
-  --fs-sm: 14px;
-  --fs-base: 16px;
-  --fs-md: 18px;
-  --fs-lg: 22px;
-  --fs-xl: 30px;
-  --fs-kpi: 40px;
+  /* Standard desktop monitor typography scale (universal 17px desktop root) */
+  --fs-xs: 14px;
+  --fs-sm: 16px;
+  --fs-base: 18px;
+  --fs-md: 20px;
+  --fs-lg: 26px;
+  --fs-xl: 38px;
+  --fs-kpi: 38px;
 
   --fw-regular: 400;
   --fw-medium: 500;
   --fw-bold: 600;
 
   /* ---- Space -------------------------------------------------------- */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
+  --space-1: 6px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 20px;
+  --space-5: 28px;
+  --space-6: 36px;
 
   /* ---- Layout ------------------------------------------------------- */
-  --sidebar-width: 250px;
-  --sidebar-collapsed-width: 68px;
+  --sidebar-width: 284px;
+  --sidebar-collapsed-width: 72px;
   --content-max-width: 100%;
 
   /* ---- Motion ------------------------------------------------------- */
@@ -186,21 +186,21 @@ a:hover {
 .ce-grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: 16px;
   margin-bottom: var(--space-4);
 }
 
 .ce-grid-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 16px;
   margin-bottom: var(--space-4);
 }
 
 .ce-stack {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 @media (max-width: 1024px) {
@@ -227,11 +227,11 @@ a:hover {
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  padding: 8px 12px;
-  margin-bottom: 22px;
+  padding: 10px 14px;
+  margin-bottom: 24px;
   background: var(--surface-1);
   border: 1px solid var(--border-subtle);
-  border-radius: 13px;
+  border-radius: 14px;
   box-shadow: var(--shadow-soft);
   font-size: var(--fs-sm);
 }
@@ -248,9 +248,9 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  height: 38px;
-  padding: 0 16px;
-  border-radius: 8px;
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 9px;
   color: var(--text-secondary);
   transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
@@ -268,7 +268,7 @@ a:hover {
   color: var(--text-muted);
   font-weight: 500;
   letter-spacing: 0.01em;
-  font-size: 13px;
+  font-size: 14px;
   text-transform: none;
   white-space: nowrap;
 }
@@ -276,16 +276,16 @@ a:hover {
 .ce-context-bar__val {
   color: var(--text-primary);
   font-weight: 600;
-  font-size: 14.5px;
+  font-size: 15.5px;
   white-space: nowrap;
-  max-width: 280px;
+  max-width: 320px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .ce-context-bar__caret {
   color: var(--text-faint);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1;
   margin-left: 2px;
 }
@@ -293,13 +293,13 @@ a:hover {
 .ce-context-bar__reset {
   display: inline-flex;
   align-items: center;
-  height: 38px;
-  padding: 0 16px;
+  height: 42px;
+  padding: 0 18px;
   color: var(--text-primary);
   font-weight: 500;
-  font-size: 13.5px;
+  font-size: 14.5px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 9px;
   background: var(--surface-1);
   border: 1px solid var(--border-strong);
   text-decoration: none;
@@ -317,7 +317,7 @@ a:hover {
    PAGE HEADER
    ===================================================================== */
 .ce-page-header {
-  margin: 0 0 20px 0;
+  margin: 0 0 24px 0;
   padding: 0;
 }
 
@@ -326,7 +326,7 @@ a:hover {
 .ce-page-header__title,
 div[data-testid="stMarkdown"] h1.ce-page-header__title,
 div[data-testid="stMarkdownContainer"] h1.ce-page-header__title {
-  margin: 0 0 6px 0 !important;
+  margin: 0 0 8px 0 !important;
   padding: 0 !important;
   font-family: var(--font-heading) !important;
   font-size: var(--fs-xl) !important;
@@ -338,17 +338,17 @@ div[data-testid="stMarkdownContainer"] h1.ce-page-header__title {
 
 .ce-page-header__purpose {
   margin: 0;
-  max-width: 1200px;
-  font-size: 15px;
+  max-width: 1100px;
+  font-size: 16px;
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 /* Small in-card section heading */
 .ce-section-title,
 div[data-testid="stMarkdown"] h3.ce-section-title,
 div[data-testid="stMarkdownContainer"] h3.ce-section-title {
-  margin: 20px 0 12px 0 !important;
+  margin: 24px 0 14px 0 !important;
   padding: 0 !important;
   font-family: var(--font-heading) !important;
   font-size: var(--fs-md) !important;
@@ -361,16 +361,25 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 /* =====================================================================
    FILTER BAR
    ===================================================================== */
+div[class*="st-key-ce_filters"] {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 12px 16px 16px !important;
+  margin-bottom: 6px;
+  box-shadow: var(--shadow-soft);
+}
+
 .ce-filter-bar {
   background: var(--surface-1);
   border: 1px solid var(--border-subtle);
-  border-radius: 13px;
-  padding: 8px 12px;
-  margin-bottom: 14px;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
   box-shadow: var(--shadow-soft);
 }
 
@@ -392,8 +401,8 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 .ce-kpi-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 16px;
+  margin-bottom: 18px;
   max-width: 100%;
 }
 
@@ -415,7 +424,7 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   flex-direction: column;
   justify-content: flex-start;
   gap: 4px;
-  padding: 14px 16px 12px;
+  padding: 18px 18px 16px;
   background: var(--surface-1);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
@@ -428,25 +437,25 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 }
 
 .ce-kpi__label {
-  font-size: 14.5px;
+  font-size: 15px;
   color: var(--text-secondary);
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .ce-kpi__value-wrap {
   display: flex;
   align-items: baseline;
-  gap: 9px;
+  gap: 8px;
   flex-wrap: wrap;
   min-width: 0;
 }
 
 .ce-kpi__value {
   font-family: var(--font-heading);
-  font-size: var(--fs-kpi);
+  font-size: clamp(28px, 2.2vw, 36px);
   font-weight: 600;
   color: var(--text-primary);
   font-variant-numeric: tabular-nums;
@@ -461,10 +470,10 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 }
 
 .ce-kpi__delta {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  padding: 3px 10px;
+  padding: 4px 11px;
   border-radius: var(--radius-pill);
   display: inline-flex;
   align-items: center;
@@ -504,15 +513,14 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 .ce-kpi__source {
   min-width: 0;
   max-width: 100%;
-  margin-top: 10px;
-  padding-top: 9px;
+  margin-top: 12px;
+  padding-top: 10px;
   border-top: 1px solid var(--border-subtle);
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--text-faint);
   font-family: var(--font-mono);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
 }
 
 /* =====================================================================
@@ -523,9 +531,9 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   background: var(--surface-1);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  padding: 18px 20px;
+  padding: 24px 24px;
   box-shadow: var(--shadow-card);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .ce-card__head {
@@ -533,8 +541,8 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 14px;
-  padding-bottom: 11px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -549,9 +557,9 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 .ce-card__badge {
   display: inline-flex;
   align-items: center;
-  height: 25px;
-  padding: 0 11px;
-  font-size: 12.5px;
+  height: 28px;
+  padding: 0 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
   background: var(--surface-2);
@@ -561,15 +569,15 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 }
 
 .ce-card__body {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-primary);
 }
 
 .ce-card__source {
-  margin-top: 14px;
-  padding-top: 10px;
+  margin-top: 16px;
+  padding-top: 12px;
   border-top: 1px dashed var(--border-subtle);
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--text-faint);
   font-family: var(--font-mono);
 }
@@ -581,8 +589,8 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   background: var(--surface-1);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  padding: 18px 20px;
-  margin-top: 16px;
+  padding: 20px 22px;
+  margin-top: 18px;
   box-shadow: var(--shadow-card);
 }
 
@@ -592,8 +600,8 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   justify-content: space-between;
   gap: 12px;
   border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 12px;
-  margin-bottom: 14px;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .ce-detail-panel__title {
@@ -606,12 +614,91 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 .ce-detail-panel__explanation {
   background: var(--surface-2);
   border-left: 2px solid var(--accent);
-  padding: 13px 16px;
+  padding: 14px 18px;
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-secondary);
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
+
+/* =====================================================================
+   BUILDING SUMMARY CARD
+   ===================================================================== */
+.ce-building-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.ce-building-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 14px;
   margin-bottom: 16px;
-  line-height: 1.55;
+}
+
+.ce-building-card__name {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.ce-building-card__usage {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  margin-left: 12px;
+}
+
+.ce-building-card__badge {
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--surface-2);
+  padding: 5px 11px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.ce-building-card__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.ce-building-card__label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.ce-building-card__value {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.ce-building-card__value--positive {
+  color: var(--positive);
+}
+
+@media (max-width: 900px) {
+  .ce-building-card__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* =====================================================================
@@ -631,7 +718,7 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 .ce-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14.5px;
+  font-size: 15px;
   text-align: left;
 }
 
@@ -639,16 +726,16 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   background: var(--surface-1);
   color: var(--text-muted);
   font-weight: 600;
-  font-size: 13.5px;
+  font-size: 14px;
   text-transform: none;
   letter-spacing: 0;
-  padding: 12px 16px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--border-subtle);
   white-space: nowrap;
 }
 
 .ce-table tbody td {
-  padding: 11px 16px;
+  padding: 13px 16px;
   border-bottom: 1px solid rgba(28, 25, 22, 0.055);
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
@@ -688,9 +775,9 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 10px;
+  padding: 4px 11px;
   border-radius: var(--radius-pill);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 500;
   border: 1px solid transparent;
   line-height: 1.45;
@@ -775,7 +862,7 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
    SOURCE NOTE & EMPTY STATE
    ===================================================================== */
 .ce-source-note {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--text-faint);
   font-family: var(--font-mono);
   margin-top: 10px;
@@ -785,10 +872,10 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
 }
 
 .ce-empty-message {
-  padding: 28px;
+  padding: 30px;
   text-align: center;
   color: var(--text-muted);
-  font-size: 15px;
+  font-size: 16px;
   background: var(--surface-1);
   border: 1px dashed var(--border-dashed);
   border-radius: var(--radius-md);
@@ -802,88 +889,100 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   display: flex;
   flex-direction: column;
   width: 100%;
-  font-size: 14px;
+  font-size: 15px;
+  padding: 4px 2px 10px !important;
 }
 
 .ce-sidebar__brand {
   padding: 4px 8px 16px 8px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   border-bottom: 1px solid var(--border-subtle);
   transition: padding var(--dur-fast) var(--ease);
+  overflow: hidden;
 }
 
 .ce-sidebar__brandrow {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .ce-sidebar__logo {
-  width: 44px;
-  height: 44px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
   flex: none;
   transition: width var(--dur-fast) var(--ease), height var(--dur-fast) var(--ease);
+  margin: 0;
 }
 
-.ce-sidebar__title {
-  font-family: var(--font-heading);
-  font-size: 14.5px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
-  line-height: 1;
-  letter-spacing: 0.12em;
+/* Streamlit's own markdown heading rules are more specific than a single
+   class, so the brand metrics are restated at matching specificity. */
+.ce-sidebar__title,
+div[data-testid="stMarkdown"] h2.ce-sidebar__title,
+div[data-testid="stMarkdownContainer"] h2.ce-sidebar__title {
+  font-family: var(--font-heading) !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  margin: 0 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.045em !important;
   white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ce-sidebar__subtitle {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-faint);
-  margin: 5px 0 0 0;
+  margin: 6px 0 0 0;
   display: block;
   letter-spacing: 0.01em;
 }
 
 .ce-sidebar__status {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-faint);
   font-family: var(--font-mono);
-  margin-top: 10px;
-  line-height: 1.55;
-  opacity: 0.85;
+  margin-top: 12px;
+  line-height: 1.6;
+  opacity: 0.9;
 }
 
 .ce-sidebar__group-label {
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 600;
   text-transform: none;
   letter-spacing: 0.02em;
   color: var(--text-muted);
-  padding: 14px 10px 6px 10px;
+  padding: 16px 10px 7px 10px;
   margin-top: 0;
 }
 
 .ce-sidebar__nav {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .ce-nav__item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  height: 38px;
+  gap: 11px;
+  height: 42px;
   padding: 0 12px;
-  border-radius: 9px;
+  border-radius: 10px;
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 400;
   text-decoration: none;
   border: 1px solid transparent;
   transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease),
-    border-color var(--dur-fast) var(--ease);
+    border-color var(--dur-fast) var(--ease), transform 120ms var(--ease);
   text-decoration: none !important;
 }
 
@@ -900,15 +999,32 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   font-weight: 500;
 }
 
+/* Press feedback: the icon dips, the row flashes, then the page fades over. */
+.ce-nav__item:active,
+.ce-nav__item--pressed {
+  transform: scale(0.965);
+}
+
+.ce-nav__item--pressed {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.ce-nav__item--pressed .ce-nav__icon {
+  color: #ffffff;
+  transform: scale(0.88);
+}
+
 .ce-nav__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  font-size: 14px;
+  width: 19px;
+  font-size: 15px;
   line-height: 1;
   color: var(--text-faint);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-fast) var(--ease), transform 120ms var(--ease);
 }
 .ce-nav__item:hover .ce-nav__icon,
 .ce-nav__item--active .ce-nav__icon {
@@ -920,6 +1036,32 @@ div[data-testid="stMarkdownContainer"] h3.ce-section-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Nav bridge iframe: zero-height and off-canvas, but still live (display:none
+   can stop the iframe from running its script). */
+div[class*="st-key-ce_nav_bridge"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 2px !important;
+  height: 2px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Proxy buttons behind the icons: kept in the DOM (so JS can click them) but
+   out of sight, layout, pointer and tab order. */
+div[class*="st-key-ce_nav_proxy"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 /* =====================================================================
@@ -1012,15 +1154,40 @@ div[data-testid="stMainBlockContainer"],
 .block-container {
   width: 100% !important;
   max-width: 100% !important;
-  padding: 18px clamp(16px, 2.2vw, 36px) 44px !important;
+  padding: 26px clamp(20px, 2.4vw, 42px) 56px !important;
   position: relative;
   z-index: 1;
   overflow-x: hidden;
 }
 
+/* Page transitions: the outgoing view dims, the incoming one rises and fades.
+   The classes are toggled by the sidebar handler in components.py. */
+.block-container {
+  transition: opacity 140ms ease;
+}
+
+.block-container.ce-page--leaving {
+  opacity: 0.35;
+}
+
+@keyframes ce-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.block-container.ce-page--enter {
+  animation: ce-page-enter 300ms var(--ease) both;
+}
+
 /* Streamlit stacks every widget in a vertical block */
 div[data-testid="stVerticalBlock"] {
-  gap: 10px;
+  gap: 12px;
 }
 
 div[data-testid="stElementContainer"]:empty {
@@ -1028,7 +1195,7 @@ div[data-testid="stElementContainer"]:empty {
 }
 
 [data-testid="stHorizontalBlock"] {
-  gap: 12px;
+  gap: 16px;
 }
 
 /* ---------------------------------------------------------------------
@@ -1051,7 +1218,7 @@ section[data-testid="stSidebar"] {
 
   background: transparent !important;
   border-right: none !important;
-  padding: 10px 8px !important;
+  padding: 12px 10px !important;
   color: var(--text-primary) !important;
   z-index: 100 !important;
   transition: width 240ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -1078,7 +1245,7 @@ section[data-testid="stSidebar"][aria-expanded="false"] {
   width: var(--sidebar-collapsed-width) !important;
   min-width: var(--sidebar-collapsed-width) !important;
   max-width: var(--sidebar-collapsed-width) !important;
-  padding: 10px 5px !important;
+  padding: 12px 6px !important;
   overflow: visible !important;
 }
 
@@ -1092,8 +1259,8 @@ section[data-testid="stSidebar"] div[data-testid="stSidebarContent"] {
   border: 1px solid rgba(255, 255, 255, 0.06) !important;
   border-radius: 20px !important;
   box-shadow: 0 24px 44px -30px rgba(28, 25, 22, 0.7) !important;
-  padding: 16px 12px 18px 12px !important;
-  height: calc(100vh - 20px) !important;
+  padding: 18px 16px 20px 16px !important;
+  height: calc(100vh - 24px) !important;
   overflow-y: auto;
   overflow-x: hidden;
   transition: padding 240ms ease !important;
@@ -1102,7 +1269,7 @@ section[data-testid="stSidebar"] div[data-testid="stSidebarContent"] {
 /* Collapsed inner rail container */
 section[data-testid="stSidebar"][data-collapsed="true"] div[data-testid="stSidebarContent"],
 section[data-testid="stSidebar"][aria-expanded="false"] div[data-testid="stSidebarContent"] {
-  padding: 50px 4px 14px 4px !important;
+  padding: 52px 6px 16px 6px !important;
   width: 100% !important;
   align-items: center !important;
   scrollbar-width: none;
@@ -1184,8 +1351,8 @@ section[data-testid="stSidebar"][aria-expanded="false"] .ce-sidebar__brandrow {
 
 section[data-testid="stSidebar"][data-collapsed="true"] .ce-sidebar__logo,
 section[data-testid="stSidebar"][aria-expanded="false"] .ce-sidebar__logo {
-  width: 32px !important;
-  height: 32px !important;
+  width: 34px !important;
+  height: 34px !important;
   margin: 0 auto !important;
 }
 
@@ -1223,8 +1390,8 @@ section[data-testid="stSidebar"][aria-expanded="false"] .ce-sidebar__nav {
 
 section[data-testid="stSidebar"][data-collapsed="true"] .ce-nav__item,
 section[data-testid="stSidebar"][aria-expanded="false"] .ce-nav__item {
-  width: 44px !important;
-  height: 40px !important;
+  width: 46px !important;
+  height: 42px !important;
   padding: 0 !important;
   margin: 1px auto !important;
   display: flex !important;
@@ -1293,7 +1460,7 @@ div[data-testid="stMarkdown"] p,
 div[data-testid="stMarkdown"] li {
   font-size: var(--fs-base);
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 div[data-testid="stMarkdown"] h1,
@@ -1307,16 +1474,22 @@ div[data-testid="stMarkdown"] h6 {
   letter-spacing: -0.01em;
 }
 
+div[data-testid="stMarkdown"] h4 {
+  font-size: 17px;
+  margin: 18px 0 10px;
+}
+
 div[data-testid="stMarkdown"] hr {
   border: none;
   border-top: 1px solid var(--border-subtle);
+  margin: 20px 0;
 }
 
 div[data-testid="stCaptionContainer"],
 div[data-testid="stCaptionContainer"] p,
 .stCaption {
   color: var(--text-faint) !important;
-  font-size: 13px !important;
+  font-size: 13.5px !important;
 }
 
 /* Links rendered inside markdown and tables */
@@ -1356,8 +1529,8 @@ div[data-testid="stTabs"] div[data-baseweb="tab-border"] {
 div[data-testid="stTab"] {
   display: inline-flex;
   align-items: center;
-  min-height: 36px;
-  padding: 6px 16px !important;
+  min-height: 40px;
+  padding: 8px 18px !important;
   border-radius: var(--radius-pill) !important;
   border: 1px solid transparent !important;
   background: transparent !important;
@@ -1380,7 +1553,7 @@ div[data-testid="stTab"][aria-selected="true"] {
 }
 
 div[data-testid="stTab"] p {
-  font-size: 14px !important;
+  font-size: 15px !important;
   font-weight: 500 !important;
   color: inherit !important;
   white-space: nowrap;
@@ -1395,7 +1568,7 @@ div[data-testid="stTab"][aria-selected="true"] p {
    ===================================================================== */
 div[data-testid="stWidgetLabel"] p,
 div[data-testid="stWidgetLabel"] label {
-  font-size: 13.5px !important;
+  font-size: 14.5px !important;
   font-weight: 500 !important;
   color: var(--text-muted) !important;
   letter-spacing: 0.01em;
@@ -1406,9 +1579,9 @@ div[data-baseweb="select"] > div {
   background-color: var(--surface-1) !important;
   border: 1px solid var(--border-subtle) !important;
   border-radius: var(--radius-pill) !important;
-  min-height: 40px !important;
+  min-height: 44px !important;
   color: var(--text-primary) !important;
-  font-size: 14.5px !important;
+  font-size: 15px !important;
   transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
 }
 
@@ -1424,7 +1597,7 @@ div[data-baseweb="select"] > div[aria-expanded="true"] {
 div[data-baseweb="select"] input,
 div[data-baseweb="select"] div[role="combobox"] {
   color: var(--text-primary) !important;
-  font-size: 14.5px !important;
+  font-size: 15px !important;
 }
 
 div[data-baseweb="select"] svg {
@@ -1438,8 +1611,8 @@ span[data-baseweb="tag"] {
   border: 1px solid var(--border-subtle) !important;
   border-radius: var(--radius-pill) !important;
   color: var(--text-primary) !important;
-  font-size: 12.5px !important;
-  height: 26px !important;
+  font-size: 13px !important;
+  height: 28px !important;
 }
 span[data-baseweb="tag"] svg {
   fill: var(--text-muted) !important;
@@ -1457,9 +1630,9 @@ div[data-baseweb="popover"] ul {
 
 div[data-baseweb="popover"] li {
   color: var(--text-secondary) !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   border-radius: 7px !important;
-  min-height: 36px !important;
+  min-height: 40px !important;
 }
 
 div[data-baseweb="popover"] li:hover,
@@ -1490,7 +1663,7 @@ div[data-testid="stTextArea"] textarea {
   background-color: transparent !important;
   border: none !important;
   color: var(--text-primary) !important;
-  font-size: 14.5px !important;
+  font-size: 15px !important;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1528,11 +1701,11 @@ div[data-testid="stRadio"] div[role="radiogroup"] label {
   display: inline-flex;
   align-items: center;
   gap: 0;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: var(--radius-pill);
   border: 1px solid transparent;
   color: var(--text-muted) !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease),
     border-color var(--dur-fast) var(--ease);
@@ -1552,7 +1725,7 @@ label[data-testid="stRadioOption"] > div {
 
 label[data-testid="stRadioOption"] p,
 div[data-testid="stRadio"] div[role="radiogroup"] label p {
-  font-size: 14px !important;
+  font-size: 15px !important;
   font-weight: 500 !important;
   color: inherit !important;
   margin: 0 !important;
@@ -1574,7 +1747,7 @@ div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) {
 
 div[data-testid="stCheckbox"] label {
   color: var(--text-secondary) !important;
-  font-size: 14.5px !important;
+  font-size: 15px !important;
 }
 
 div[data-testid="stCheckbox"] label:hover {
@@ -1603,7 +1776,7 @@ div[data-testid="stSlider"] div[data-testid="stSliderThumbValue"],
 div[data-testid="stSlider"] div[data-testid="stSliderTickBarMin"],
 div[data-testid="stSlider"] div[data-testid="stSliderTickBarMax"] {
   color: var(--text-muted) !important;
-  font-size: 12px !important;
+  font-size: 13px !important;
 }
 
 /* Forms */
@@ -1624,9 +1797,9 @@ div[data-testid="stExpander"] details {
 }
 
 div[data-testid="stExpander"] summary {
-  font-size: 14.5px !important;
+  font-size: 15px !important;
   color: var(--text-secondary) !important;
-  padding: 12px 16px !important;
+  padding: 14px 18px !important;
 }
 div[data-testid="stExpander"] summary:hover {
   color: var(--text-primary) !important;
@@ -1639,14 +1812,14 @@ div[data-testid="stExpander"] summary:hover {
 div[data-testid="stButton"] button,
 div[data-testid="stDownloadButton"] button,
 div[data-testid="stFormSubmitButton"] button {
-  min-height: 38px;
-  height: 38px;
-  padding: 0 18px !important;
+  min-height: 42px;
+  height: 42px;
+  padding: 0 20px !important;
   background: var(--surface-1) !important;
   border: 1px solid var(--border-strong) !important;
   border-radius: var(--radius-pill) !important;
   color: var(--text-primary) !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   font-weight: 500 !important;
   letter-spacing: 0;
   box-shadow: none !important;
@@ -1690,29 +1863,29 @@ div[data-testid="stMetric"] {
   background: var(--surface-1);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 12px 14px;
+  padding: 14px 16px;
   box-shadow: var(--shadow-soft);
 }
 
 div[data-testid="stMetricLabel"] p {
   color: var(--text-muted) !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
   text-transform: none;
   letter-spacing: 0;
 }
 
 div[data-testid="stMetricValue"] {
   color: var(--text-primary) !important;
-  font-size: 28px !important;
+  font-size: 30px !important;
   font-weight: 500 !important;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 
 div[data-testid="stAlert"] {
-  padding: 14px 16px !important;
+  padding: 16px 18px !important;
   border-radius: var(--radius-md) !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   background: var(--surface-1) !important;
   border: 1px solid var(--border-subtle) !important;
   color: var(--text-secondary) !important;
@@ -1720,7 +1893,7 @@ div[data-testid="stAlert"] {
 }
 
 div[data-testid="stAlert"] p {
-  font-size: 14px !important;
+  font-size: 15px !important;
   color: var(--text-secondary) !important;
 }
 
@@ -1736,7 +1909,7 @@ div[data-testid="stJson"] {
   border-radius: var(--radius-md) !important;
   color: var(--text-secondary) !important;
   font-family: var(--font-mono) !important;
-  font-size: 13px !important;
+  font-size: 13.5px !important;
 }
 
 /* =====================================================================
@@ -1748,7 +1921,7 @@ div[class*="st-key-ce_card_"] {
   border: 1px solid var(--border-subtle) !important;
   border-radius: var(--radius-lg) !important;
   box-shadow: var(--shadow-card);
-  padding: 12px 14px 6px !important;
+  padding: 14px 16px 8px !important;
   margin-bottom: 2px;
 }
 
@@ -1758,11 +1931,11 @@ div[data-testid="stVerticalBlockBorderWrapper"] div[data-testid="stVerticalBlock
 }
 
 .ce-chart-head {
-  padding: 0 2px 4px 2px;
+  padding: 2px 4px 6px 4px;
 }
 
 .ce-chart-head__title {
-  font-size: 15.5px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.005em;
@@ -1770,10 +1943,10 @@ div[data-testid="stVerticalBlockBorderWrapper"] div[data-testid="stVerticalBlock
 }
 
 .ce-chart-head__sub {
-  margin-top: 2px;
-  font-size: 13px;
+  margin-top: 3px;
+  font-size: 14px;
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 div[data-testid="stPlotlyChart"] {
@@ -1843,30 +2016,30 @@ div[data-testid="stPlotlyChart"] .modebar-btn:hover path {
     display: none !important;
   }
   .main .block-container {
-    padding: 12px 12px 28px !important;
+    padding: 16px 16px 32px !important;
   }
   .ce-context-bar {
     flex-direction: column;
     align-items: flex-start;
-    padding: 8px;
+    padding: 10px;
   }
   .ce-context-bar__items {
     width: 100%;
     gap: 2px;
   }
   .ce-context-bar__item {
-    padding: 0 8px;
+    padding: 0 10px;
   }
   .ce-context-bar__item + .ce-context-bar__item {
     box-shadow: none;
   }
   .ce-page-header__title {
-    font-size: 19px;
+    font-size: 26px;
   }
   .ce-kpi__value {
-    font-size: 24px;
+    font-size: 30px;
   }
   .ce-card {
-    padding: 14px;
+    padding: 16px;
   }
 }

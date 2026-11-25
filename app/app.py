@@ -10,10 +10,11 @@ from __future__ import annotations
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as st_components
 import pandas as pd
 
 from theme import load_css
-from components import ce_sidebar_html, ce_context_bar
+from components import ce_sidebar_html, ce_context_bar, ce_nav_bridge_html
 from data import (
     get_pipeline_status,
     get_building_catalog,
@@ -41,6 +42,14 @@ PAGES = [
     {"slug": "settings", "label": "Settings & Assumptions", "icon": "⚙", "group": "System"},
     {"slug": "method", "label": "Methodology", "icon": "○", "group": "System"},
 ]
+
+def goto_page(slug: str) -> None:
+    """Switch the active page without reloading the document.
+
+    The sidebar icons click a hidden Streamlit button for the target page, so
+    the switch arrives as a websocket rerun rather than a full page load.
+    """
+    st.session_state["page"] = slug
 
 def init_session_state():
     catalog = get_building_catalog()
@@ -86,12 +95,14 @@ def main():
         st.query_params["page"] = current_page
         st.rerun()
 
-    # Determine active page from URL query params
-    active_page = st.query_params.get("page", "overview")
+    # Determine the active page. In-app navigation is handled in the browser
+    # (see ce_nav_proxy below), so the slug lives in session state; ?page= stays
+    # authoritative for direct links, bookmarks and reloads.
     valid_slugs = [p["slug"] for p in PAGES]
+    active_page = st.session_state.get("page") or st.query_params.get("page", "overview")
     if active_page not in valid_slugs:
         active_page = "overview"
-        st.query_params["page"] = "overview"
+    st.session_state["page"] = active_page
 
     # Inject the design system
     css_content = load_css()
@@ -104,6 +115,22 @@ def main():
             ce_sidebar_html(PAGES, active_page, run_time, window),
             unsafe_allow_html=True,
         )
+
+        # Hidden component: binds the icon clicks to the proxy buttons below so
+        # a page switch reruns the script over the websocket instead of
+        # reloading the whole document.
+        with st.container(key="ce_nav_bridge"):
+            st_components.html(ce_nav_bridge_html(), height=0)
+
+        # Hidden proxies: one per page, clicked by the nav bridge.
+        with st.container(key="ce_nav_proxy"):
+            for _page in PAGES:
+                st.button(
+                    _page["label"],
+                    key=f"nav_{_page['slug']}",
+                    on_click=goto_page,
+                    args=(_page["slug"],),
+                )
 
     # Render Sticky Global Context Bar
     catalog = get_building_catalog()

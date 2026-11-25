@@ -168,26 +168,26 @@ def chart_layout(
     title_text = None
     if title:
         if subtitle:
-            title_text = f"<b>{title}</b><br><span style='font-size:12.5px;color:{CHART_THEME['text_muted']};font-weight:normal'>{subtitle}</span>"
+            title_text = f"<b>{title}</b><br><span style='font-size:13.5px;color:{CHART_THEME['text_muted']};font-weight:normal'>{subtitle}</span>"
         else:
             title_text = f"<b>{title}</b>"
 
-    top = 46 if (title or subtitle) else 30
-    m = {"l": 55, "r": 18, "t": top, "b": 45, "pad": 0}
+    top = 50 if (title or subtitle) else 32
+    m = {"l": 62, "r": 20, "t": top, "b": 52, "pad": 0}
     if show_rangeslider:
         # Keep the slider clear of the axis title.
-        m["b"] = 74
+        m["b"] = 82
     if margin:
         m.update(margin)
 
     x_axis: dict[str, Any] = {
-        "title": {"text": x_title, "font": {"size": 13, "color": CHART_THEME["text_muted"]}} if x_title else None,
+        "title": {"text": x_title, "font": {"size": 14, "color": CHART_THEME["text_muted"]}} if x_title else None,
         "showgrid": False,
         "showline": False,
         "linecolor": CHART_THEME["border_color"],
         "ticks": "",
         "tickcolor": "rgba(0,0,0,0)",
-        "tickfont": {"size": 12, "color": CHART_THEME["text_muted"]},
+        "tickfont": {"size": 13, "color": CHART_THEME["text_muted"]},
         "zeroline": False,
         "automargin": True,
     }
@@ -207,14 +207,14 @@ def chart_layout(
     x_axis["rangeslider"] = rangeslider
 
     y_axis: dict[str, Any] = {
-        "title": {"text": y_title, "font": {"size": 13, "color": CHART_THEME["text_muted"]}} if y_title else None,
+        "title": {"text": y_title, "font": {"size": 14, "color": CHART_THEME["text_muted"]}} if y_title else None,
         "showgrid": True,
         "gridcolor": CHART_THEME["grid_color"],
         "gridwidth": 1,
         "showline": False,
         "ticks": "",
         "tickcolor": "rgba(0,0,0,0)",
-        "tickfont": {"size": 12, "color": CHART_THEME["text_muted"]},
+        "tickfont": {"size": 13, "color": CHART_THEME["text_muted"]},
         "zeroline": True,
         "zerolinecolor": CHART_THEME["grid_color"],
         "automargin": True,
@@ -229,12 +229,12 @@ def chart_layout(
         "plot_bgcolor": CHART_THEME["plot_bgcolor"],
         "font": {
             "family": CHART_THEME["font_family"],
-            "size": 13.5,
+            "size": 14.5,
             "color": CHART_THEME["text_color"],
         },
         "title": {
             "text": title_text,
-            "font": {"size": 15, "color": CHART_THEME["text_color"]},
+            "font": {"size": 16, "color": CHART_THEME["text_color"]},
             "x": 0.01,
             "xanchor": "left",
         } if title_text else None,
@@ -243,7 +243,7 @@ def chart_layout(
             "bordercolor": CHART_THEME["hover_border"],
             "font": {
                 "family": CHART_THEME["font_family"],
-                "size": 12.5,
+                "size": 13.5,
                 "color": CHART_THEME["text_color"],
             },
         },
@@ -255,7 +255,7 @@ def chart_layout(
             "y": 1.02,
             "xanchor": "left",
             "x": 0.01,
-            "font": {"size": 12.5, "color": CHART_THEME["text_muted"]},
+            "font": {"size": 13.5, "color": CHART_THEME["text_muted"]},
             "bgcolor": CHART_THEME["legend_bg"],
             "itemsizing": "constant",
         },
@@ -711,10 +711,10 @@ def fig_heatmap(hourly_df: pd.DataFrame) -> go.Figure:
         colorscale=[[0.0, "#f7f5f2"], [0.35, "#ded8cf"], [0.7, "#8f8880"], [1.0, "#1b1a18"]],
         hovertemplate="Day: %{x}<br>Hour: %{y}:00<br>Load: %{z:,.1f} kWh<extra></extra>",
         colorbar={
-            "title": {"text": "kWh", "font": {"size": 12, "color": CHART_THEME["text_muted"]}},
+            "title": {"text": "kWh", "font": {"size": 13, "color": CHART_THEME["text_muted"]}},
             "thickness": 10,
             "outlinewidth": 0,
-            "tickfont": {"size": 11.5, "color": CHART_THEME["text_muted"]},
+            "tickfont": {"size": 12.5, "color": CHART_THEME["text_muted"]},
             "bgcolor": "rgba(0,0,0,0)",
         },
     ))
@@ -886,7 +886,7 @@ def fig_single_hour_contributions(contributions_df: pd.DataFrame, base_val: floa
         marker={"color": colors, "cornerradius": 6},
         text=[f"{v:+.1f} kWh" for v in df_sorted["shap"]],
         textposition="auto",
-        textfont={"size": 12, "color": CHART_THEME["text_color"]},
+        textfont={"size": 13, "color": CHART_THEME["text_color"]},
         hovertemplate="Feature: %{y}<br>Value: %{customdata}<br>Impact: %{x:+.2f} kWh<extra></extra>",
         customdata=df_sorted["value"] if "value" in df_sorted.columns else df_sorted["shap"],
     ))
@@ -977,7 +977,7 @@ def fig_model_bars(metrics_df: pd.DataFrame, metric_col: str = "cv_rmse_pct", me
         marker={"color": bar_colors, "cornerradius": 8},
         text=[f"{v:.2f}%" for v in scores],
         textposition="auto",
-        textfont={"size": 12, "color": "#ffffff"},
+        textfont={"size": 13, "color": "#ffffff"},
         hovertemplate="Model: %{x}<br>Score: %{y:.2f}%<extra></extra>",
     ))
 

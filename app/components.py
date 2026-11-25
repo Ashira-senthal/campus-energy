@@ -209,6 +209,84 @@ def ce_table(
 {source_html}
 """
 
+# Streamlit's markdown sanitizer strips inline event handlers, so the sidebar
+# links cannot carry onclick. This bridge runs in a hidden component iframe and
+# binds one delegated click listener on the parent document instead: clicking
+# an icon clicks the hidden Streamlit button that owns the page switch, which
+# arrives as a websocket rerun (no document reload, no asset re-fetch). The URL
+# is updated in place so pages stay deep-linkable, and the incoming content
+# fades in once the rerun commits.
+_NAV_BRIDGE_JS = """
+(function () {
+  var P, D;
+  try { P = window.parent; D = P.document; } catch (e) { return; }
+  if (!D) return;
+
+  var previous = P.__ceNavHandler;
+  if (typeof previous === 'function') {
+    try { D.removeEventListener('click', previous, true); } catch (e) {}
+  }
+
+  function mainBlock() { return D.querySelector('.block-container'); }
+
+  function replay() {
+    var m = mainBlock();
+    if (m) {
+      m.classList.remove('ce-page--leaving');
+      m.classList.remove('ce-page--enter');
+      void m.offsetWidth;
+      m.classList.add('ce-page--enter');
+    }
+    var sc = D.querySelector('[data-testid="stMain"]');
+    if (sc) sc.scrollTop = 0;
+    try { P.scrollTo(0, 0); } catch (e) {}
+  }
+
+  function onClick(event) {
+    if (event.__ceHandled) return;
+    var target = event.target;
+    var anchor = target && target.closest ? target.closest('.ce-nav__item') : null;
+    if (!anchor) return;
+    var slug = anchor.getAttribute('data-ce-page');
+    if (!slug) return;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    event.__ceHandled = true;
+    if (anchor.classList.contains('ce-nav__item--active')) return;
+
+    var button = D.querySelector('.st-key-nav_' + slug + ' button');
+    if (!button) return;
+
+    try {
+      var url = new P.URL(P.location.href);
+      url.searchParams.set('page', slug);
+      P.history.replaceState({ cePage: slug }, '', url.pathname + url.search);
+    } catch (e) {}
+
+    var outgoing = mainBlock();
+    if (outgoing) outgoing.classList.add('ce-page--leaving');
+    anchor.classList.add('ce-nav__item--pressed');
+
+    P.setTimeout(function () { button.click(); }, 70);
+
+    var tries = 0;
+    (function waitForCommit() {
+      var active = D.querySelector('.ce-sidebar__nav .ce-nav__item--active');
+      if (active && active.getAttribute('data-ce-page') === slug) { replay(); return; }
+      if (++tries < 100) { P.setTimeout(waitForCommit, 50); return; }
+      if (outgoing) outgoing.classList.remove('ce-page--leaving');
+    })();
+  }
+
+  D.addEventListener('click', onClick, true);
+  P.__ceNavHandler = onClick;
+})();
+"""
+
+def ce_nav_bridge_html() -> str:
+    """Markup for the hidden component iframe that wires up in-page nav."""
+    return f"<script>{_NAV_BRIDGE_JS}</script>"
+
 def ce_sidebar_html(
     pages: list[dict[str, Any]],
     active_page: str,
@@ -232,12 +310,15 @@ def ce_sidebar_html(
             label = p["label"]
             url = f"?page={slug}"
 
-            nav_items_html.append(f"""
-<a class="ce-nav__item{active_cls}" href="{url}" target="_self" title="{html.escape(label)}">
-  <span class="ce-nav__icon" aria-hidden="true">{icon}</span>
-  <span class="ce-nav__label">{html.escape(label)}</span>
-</a>
-""")
+            # href stays as the fallback; the nav bridge upgrades it to an
+            # in-page switch.
+            nav_items_html.append(
+                f'<a class="ce-nav__item{active_cls}" href="{url}" target="_self"'
+                f' data-ce-page="{slug}" title="{html.escape(label)}">'
+                f'<span class="ce-nav__icon" aria-hidden="true">{icon}</span>'
+                f'<span class="ce-nav__label">{html.escape(label)}</span>'
+                "</a>"
+            )
 
     nav_content = "".join(nav_items_html)
 
